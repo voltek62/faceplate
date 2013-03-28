@@ -128,12 +128,32 @@ var FaceplateSession = function(plate, signed_request) {
         var request = restler.get('https://graph.facebook.com' + path,
           { query: params });
         request.on('fail', function(data) {
-          var result = JSON.parse(data);
-          cb(result);
+          
+          if (typeof data === "string") {
+            try {
+              var result = JSON.parse(data);
+              cb(result);
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            cb(data);
+          }
+          
         });
         request.on('success', function(data) {
-          var result = JSON.parse(data);
-          cb(null, result);
+          
+          if (typeof data === "string") {
+            try {
+              var result = JSON.parse(data);
+              cb(null, result);
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            cb(null, data);
+          }
+          
         });
     } catch (err) {
       cb(err);
