@@ -153,9 +153,7 @@ var FaceplateSession = function(plate, signed_request) {
           
           if (typeof data === "string") {
             try {
-              var result = JSON.
-              
-              (data);
+              var result = JSON.parse(data);
               cb(result);
             } catch (e) {
               cb(e);
