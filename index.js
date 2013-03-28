@@ -79,12 +79,34 @@ var Faceplate = function(options) {
       { query:params });
 
     request.on('fail', function(data) {
-      var result = JSON.parse(data);
-      cb(result);
+      
+      if (typeof data === "string") {
+            try {
+              var result = JSON.parse(data);
+              cb(result);
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            cb(data);
+      }
+      
+      
     });
 
     request.on('success', function(data) {
-      cb(null,qs.parse(data));
+      
+      if (typeof data === "string") {
+            try {
+              cb(null,qs.parse(data));
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            cb(null,data);
+          }
+      
+
     });
   };
 };
@@ -131,7 +153,9 @@ var FaceplateSession = function(plate, signed_request) {
           
           if (typeof data === "string") {
             try {
-              var result = JSON.parse(data);
+              var result = JSON.
+              
+              (data);
               cb(result);
             } catch (e) {
               cb(e);
@@ -169,8 +193,18 @@ var FaceplateSession = function(plate, signed_request) {
       method = 'fql.query';
       params.query = query;
       onComplete = function(res){
-        var result = JSON.parse(res);
-        cb(null, result.data ? result.data : result);
+        
+        if (typeof res === "string") {
+            try {
+              var result = JSON.parse(res);
+              cb(null, result.data ? result.data : result);
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            cb(null, res);
+          }
+        
       };
     }
     else {
@@ -190,8 +224,18 @@ var FaceplateSession = function(plate, signed_request) {
     var request = restler.get('https://api.facebook.com/method/'+method,
       { query: params });
     request.on('fail', function(data) {
-      var result = JSON.parse(data);
-      cb(result);
+      
+      if (typeof data === "string") {
+            try {
+              var result = JSON.parse(data);
+              cb(result);
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            cb(ata);
+      }
+      
     });
     request.on('success', onComplete);
   };
@@ -202,12 +246,34 @@ var FaceplateSession = function(plate, signed_request) {
       {query: {access_token: self.token}, data: params}
       );
     request.on('fail', function(data) {
-      var result = JSON.parse(data);
-      cb(result);
+      
+      //cb(null,qs.parse(data));     
+     if (typeof data === "string") {
+        try {
+          cb(null,qs.parse(data));   
+        } catch (e) {
+          cb(e);
+        }
+      } else {
+        cb(null,data);   
+      }
+      
+      
     });
     request.on('success', function (data) {
-      var result = JSON.parse(data);
-      cb(null, result.data ? result.data : result);
+      
+
+     if (typeof data === "string") {
+        try {
+          var result = JSON.parse(data);
+          cb(null, result.data ? result.data : result);
+        } catch (e) {
+          cb(null,e);
+        }
+      } else {
+        cb(null, data);
+      }      
+      
     });
   };
 };
